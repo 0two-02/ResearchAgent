@@ -1,16 +1,34 @@
-sqlite:///./researchpilot.db
+# Python
 __pycache__/
 *.pyc
 *.pyo
-node_modules/
 venv/
 .venv/
+
+# Environment variables
+.env
+
+# Logs
 *.log
+
+# Node.js
+node_modules/
+frontend/node_modules/
+
+# Database
 *.sqlite
 *.db
-.DS_Store
+
+# ChromaDB
+chroma_db/
+
+# Uploads
+uploads/
+
+# Frontend build
+frontend/build/
+
+# IDE / OS
 .idea/
 .vscode/
-uploads/
-chroma_db/
-frontend/build/
+.DS_Store
