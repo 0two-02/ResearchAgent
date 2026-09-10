@@ -1,0 +1,16 @@
+sqlite:///./researchpilot.db
+__pycache__/
+*.pyc
+*.pyo
+node_modules/
+venv/
+.venv/
+*.log
+*.sqlite
+*.db
+.DS_Store
+.idea/
+.vscode/
+uploads/
+chroma_db/
+frontend/build/

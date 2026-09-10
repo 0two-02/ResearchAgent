@@ -1,0 +1,94 @@
+/* App-level Styles */
+
+/* ── Navbar ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 17, 23, 0.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  gap: 24px;
+}
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.brand-icon { font-size: 22px; }
+.brand-name {
+  font-size: 16px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #4f8ef7, #7c5cd8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+.nav-link {
+  padding: 6px 14px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+.nav-link:hover { color: var(--text); background: var(--surface); text-decoration: none; }
+.nav-link.active { color: var(--accent); background: rgba(79,142,247,0.1); }
+.navbar-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.ibm-status {
+  font-size: 11px;
+  font-weight: 600;
+}
+.ibm-status.connected { color: var(--success); }
+.ibm-status.demo { color: var(--text-muted); }
+
+/* ── Main Content ── */
+.main-content {
+  min-height: calc(100vh - 60px);
+}
+
+/* ── Page Layout ── */
+.page {
+  padding: 28px 0;
+}
+.page-header {
+  margin-bottom: 24px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ── Section ── */
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

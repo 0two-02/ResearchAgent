@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - IBM_API_KEY=${IBM_API_KEY}
+      - IBM_PROJECT_ID=${IBM_PROJECT_ID}
+      - IBM_URL=${IBM_URL:-https://us-south.ml.cloud.ibm.com}
+      - SEMANTIC_SCHOLAR_API_KEY=${SEMANTIC_SCHOLAR_API_KEY}
+      - DATABASE_URL=sqlite:///./researchpilot.db
+      - CHROMA_PERSIST_DIRECTORY=/app/chroma_db
+      - DEMO_MODE=${DEMO_MODE:-false}
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:80
+    volumes:
+      - ./backend:/app
+      - chroma_data:/app/chroma_db
+      - uploads_data:/app/uploads
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+
+volumes:
+  chroma_data:
+  uploads_data:

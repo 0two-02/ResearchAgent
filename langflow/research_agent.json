@@ -1,0 +1,158 @@
+{
+  "id": "research-agent-flow",
+  "name": "ResearchPilot AI – Research Agent Workflow",
+  "description": "End-to-end agentic research workflow using IBM watsonx.ai",
+  "nodes": [
+    {
+      "id": "user_query",
+      "type": "TextInput",
+      "label": "User Research Query",
+      "description": "The user's research question or topic",
+      "position": { "x": 400, "y": 50 }
+    },
+    {
+      "id": "research_planner",
+      "type": "PromptTemplate",
+      "label": "Research Planner Agent",
+      "description": "Agent 1: Plans the research strategy",
+      "template": "You are a Research Planner Agent.\n\nResearch Question: {query}\n\nGenerate a structured research plan as JSON:\n{{\n  \"research_topic\": \"...\",\n  \"key_concepts\": [],\n  \"search_queries\": [],\n  \"recommended_sources\": []\n}}",
+      "inputs": ["user_query"],
+      "position": { "x": 400, "y": 180 },
+      "ibm_model": "ibm/granite-13b-chat-v2"
+    },
+    {
+      "id": "search_query_generator",
+      "type": "PromptTemplate",
+      "label": "Search Query Generator",
+      "description": "Generates optimized academic search queries",
+      "template": "Based on this research plan:\n{plan}\n\nGenerate 5 optimized academic search queries.",
+      "inputs": ["research_planner"],
+      "position": { "x": 400, "y": 310 },
+      "ibm_model": "ibm/granite-13b-chat-v2"
+    },
+    {
+      "id": "academic_apis",
+      "type": "APICall",
+      "label": "Academic Source APIs",
+      "description": "Parallel calls to arXiv, Semantic Scholar, OpenAlex, CrossRef",
+      "sources": ["arxiv", "semantic_scholar", "openalex", "crossref"],
+      "inputs": ["search_query_generator"],
+      "position": { "x": 400, "y": 440 }
+    },
+    {
+      "id": "deduplication",
+      "type": "PythonFunction",
+      "label": "Deduplication & Ranking",
+      "description": "Removes duplicates, ranks by relevance",
+      "inputs": ["academic_apis"],
+      "position": { "x": 400, "y": 570 }
+    },
+    {
+      "id": "paper_analysis",
+      "type": "PromptTemplate",
+      "label": "Paper Analysis Agent",
+      "description": "Agent 3: Extracts structured information from each paper",
+      "template": "Analyze this paper and extract structured information as JSON:\nTitle: {title}\nAbstract: {abstract}\n\nExtract: problem_statement, objective, methodology, dataset, results, limitations, key_findings, future_work",
+      "inputs": ["deduplication"],
+      "position": { "x": 400, "y": 700 },
+      "ibm_model": "ibm/granite-13b-chat-v2"
+    },
+    {
+      "id": "knowledge_store",
+      "type": "VectorStore",
+      "label": "Research Knowledge Store",
+      "description": "ChromaDB vector store for semantic retrieval",
+      "inputs": ["paper_analysis"],
+      "position": { "x": 400, "y": 830 }
+    },
+    {
+      "id": "literature_review",
+      "type": "PromptTemplate",
+      "label": "Literature Review Agent",
+      "description": "Agent 4: Generates structured literature reviews",
+      "template": "Based on these papers, generate a comprehensive literature review covering: Introduction, Existing Research, Major Approaches, Comparison, Findings, Limitations, Gaps, Trends, Future Directions.\n\nPapers: {papers}",
+      "inputs": ["knowledge_store"],
+      "position": { "x": 150, "y": 980 },
+      "ibm_model": "ibm/granite-13b-chat-v2"
+    },
+    {
+      "id": "gap_agent",
+      "type": "PromptTemplate",
+      "label": "Research Gap Agent",
+      "description": "Agent 5: Identifies research gaps",
+      "template": "Analyze these papers and identify research gaps, understudied areas, contradictions, and missing methodologies.\n\nPapers: {papers}\n\nReturn JSON: {{research_gaps, evidence, importance, possible_research_questions}}",
+      "inputs": ["knowledge_store"],
+      "position": { "x": 400, "y": 980 },
+      "ibm_model": "ibm/granite-13b-chat-v2"
+    },
+    {
+      "id": "trend_agent",
+      "type": "PromptTemplate",
+      "label": "Trend Prediction Agent",
+      "description": "Agent 6: Analyzes publication trends",
+      "template": "Analyze publication trends from these papers. Identify growing topics, declining topics, emerging keywords.\n\nPapers: {papers}\n\nReturn JSON: {{growing_topics, declining_topics, emerging_keywords, active_research_areas}}",
+      "inputs": ["knowledge_store"],
+      "position": { "x": 650, "y": 980 },
+      "ibm_model": "ibm/granite-13b-chat-v2"
+    },
+    {
+      "id": "recommendation_agent",
+      "type": "PromptTemplate",
+      "label": "Research Recommendation Agent",
+      "description": "Agent 8: Suggests future research directions",
+      "template": "Based on the literature review, gaps, and trends, suggest future research directions.\n\nContext: {context}\n\nReturn JSON with recommendations including: research_idea, why_it_matters, methodology, dataset, contribution, difficulty",
+      "inputs": ["literature_review", "gap_agent", "trend_agent"],
+      "position": { "x": 400, "y": 1120 },
+      "ibm_model": "ibm/granite-13b-chat-v2"
+    },
+    {
+      "id": "visualization_layer",
+      "type": "OutputFormatter",
+      "label": "Visualization Layer",
+      "description": "Formats output for React dashboard",
+      "inputs": ["recommendation_agent"],
+      "position": { "x": 400, "y": 1250 }
+    },
+    {
+      "id": "user_dashboard",
+      "type": "Output",
+      "label": "User Dashboard",
+      "description": "Final output to React frontend",
+      "inputs": ["visualization_layer"],
+      "position": { "x": 400, "y": 1380 }
+    }
+  ],
+  "edges": [
+    { "source": "user_query", "target": "research_planner" },
+    { "source": "research_planner", "target": "search_query_generator" },
+    { "source": "search_query_generator", "target": "academic_apis" },
+    { "source": "academic_apis", "target": "deduplication" },
+    { "source": "deduplication", "target": "paper_analysis" },
+    { "source": "paper_analysis", "target": "knowledge_store" },
+    { "source": "knowledge_store", "target": "literature_review" },
+    { "source": "knowledge_store", "target": "gap_agent" },
+    { "source": "knowledge_store", "target": "trend_agent" },
+    { "source": "literature_review", "target": "recommendation_agent" },
+    { "source": "gap_agent", "target": "recommendation_agent" },
+    { "source": "trend_agent", "target": "recommendation_agent" },
+    { "source": "recommendation_agent", "target": "visualization_layer" },
+    { "source": "visualization_layer", "target": "user_dashboard" }
+  ],
+  "config": {
+    "ibm_watsonx": {
+      "url": "${IBM_URL}",
+      "api_key": "${IBM_API_KEY}",
+      "project_id": "${IBM_PROJECT_ID}",
+      "model_id": "ibm/granite-13b-chat-v2",
+      "parameters": {
+        "max_new_tokens": 2048,
+        "temperature": 0.3,
+        "top_p": 0.9
+      }
+    },
+    "vector_store": {
+      "type": "chromadb",
+      "persist_directory": "${CHROMA_PERSIST_DIRECTORY}"
+    }
+  }
+}

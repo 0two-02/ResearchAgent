@@ -1,0 +1,145 @@
+/* HomePage Styles */
+
+.home-page {
+  min-height: 100vh;
+}
+
+/* ── Hero ── */
+.hero {
+  text-align: center;
+  padding: 80px 20px 60px;
+  background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(79,142,247,0.15), transparent);
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(79,142,247,0.15);
+  border: 1px solid rgba(79,142,247,0.3);
+  color: var(--accent);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+}
+.hero-title {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  background: linear-gradient(135deg, #e8eaf0 0%, #4f8ef7 50%, #7c5cd8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.hero-tagline {
+  font-size: 20px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.hero-description {
+  max-width: 640px;
+  margin: 0 auto 32px;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-btn { font-size: 15px; padding: 12px 24px; }
+
+/* ── Sections ── */
+.home-section {
+  padding: 48px 0;
+}
+.home-section-title {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* ── Features Grid ── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.feature-card {
+  text-align: center;
+  padding: 24px;
+  transition: border-color var(--transition), transform var(--transition);
+}
+.feature-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.feature-icon { font-size: 32px; margin-bottom: 12px; }
+.feature-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+/* ── Impact ── */
+.impact-section { }
+.impact-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+}
+.impact-arrow {
+  font-size: 40px;
+  color: var(--accent);
+  text-align: center;
+}
+.impact-col { padding: 24px; }
+.impact-col-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.impact-col-title.before { color: var(--danger); }
+.impact-col-title.after { color: var(--success); }
+.impact-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.impact-item { font-size: 14px; padding: 8px 12px; border-radius: 8px; }
+.impact-before { background: rgba(239,68,68,0.06); color: var(--text-muted); }
+.impact-after { background: rgba(34,197,94,0.06); color: var(--text); }
+
+/* ── Workflow ── */
+.workflow-flow { padding: 32px; }
+.workflow-steps {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.workflow-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  min-width: 280px;
+  transition: border-color var(--transition);
+}
+.ibm-step { border-color: rgba(79,142,247,0.4); }
+.workflow-icon { font-size: 18px; }
+.workflow-label { font-size: 13px; font-weight: 500; flex: 1; }
+.workflow-arrow { color: var(--text-muted); font-size: 18px; }
+
+/* ── Footer ── */
+.home-footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .impact-grid { grid-template-columns: 1fr; }
+  .impact-arrow { transform: rotate(90deg); }
+}
